@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freelancer Tax Set-Aside Calculator – RateRight</title>
+<meta name="description" content="Free tax set-aside calculator for freelancers. See what percentage of every invoice to save for taxes, plus monthly and quarterly amounts.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Freelancer Tax Set-Aside Calculator – RateRight">
+<meta property="og:description" content="How much of each invoice should you save for tax? Free, private, no signup.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "How much should a freelancer set aside for taxes?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Many freelancers set aside 20 to 30 percent of their profit, but the right figure depends on your country, income level and deductions. Ask a local accountant for your exact rate."}},
+    {"@type": "Question", "name": "Do I pay tax on revenue or on profit?",
+     "acceptedAnswer": {"@type": "Answer", "text": "In most countries freelancers are taxed on profit, which is revenue minus allowable business expenses. Rules differ, so check your local tax authority."}},
+    {"@type": "Question", "name": "Should I keep tax money in a separate account?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. Moving the set-aside percentage into a separate savings account every time you get paid makes tax bills much less stressful."}}
+  ]
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><a href="index.html">Rate<span>Right</span></a></div>
+    <nav class="nav">
+      <a href="index.html">Hourly Rate</a>
+      <a href="project-quote-calculator.html">Project Quote</a>
+      <a href="freelance-tax-calculator.html" class="on">Tax Set-Aside</a>
+      <a href="salary-to-freelance-rate-calculator.html">Salary to Freelance</a>
+    </nav>
+    <h1>Freelancer Tax Set-Aside Calculator</h1>
+    <p class="lead">Find out what percentage of every payment to save for taxes, and how much that is per invoice, per month and per quarter.</p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>Your numbers</h2>
+        <label for="cur">Currency</label>
+        <select id="cur">
+          <option value="$">USD ($)</option>
+          <option value="£">GBP (£)</option>
+          <option value="€">EUR (€)</option>
+          <option value="A$">AUD (A$)</option>
+          <option value="C$">CAD (C$)</option>
+          <option value="Rs ">PKR (Rs)</option>
+          <option value="₹">INR (₹)</option>
+          <option value="AED ">AED</option>
+        </select>
+
+        <label for="rev">Expected yearly revenue <small>(total invoiced)</small></label>
+        <input id="rev" type="number" inputmode="decimal" min="0" value="70000">
+
+        <div class="row">
+          <div>
+            <label for="exp">Yearly expenses</label>
+            <input id="exp" type="number" inputmode="decimal" min="0" value="5000">
+          </div>
+          <div>
+            <label for="tax">Tax rate % <small>(on profit)</small></label>
+            <input id="tax" type="number" inputmode="decimal" min="0" max="90" value="22">
+          </div>
+        </div>
+
+        <label for="inv">Example invoice amount <small>(optional)</small></label>
+        <input id="inv" type="number" inputmode="decimal" min="0" value="1000">
+        <div class="err" id="err" role="alert"></div>
+        <div class="note">Use one combined rate that includes income tax plus any self-employment or social contributions in your country. This is a planning estimate, not tax advice.</div>
+      </div>
+
+      <div class="card" aria-live="polite">
+        <h2>What to save</h2>
+        <div class="big">
+          <div class="t">Set aside from every payment</div>
+          <div class="n" id="pct">–</div>
+          <div class="u">of what you invoice</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">From your example invoice</div><div class="v" id="invSave">–</div></div>
+          <div class="stat"><div class="k">Yearly tax estimate</div><div class="v" id="taxYear">–</div></div>
+          <div class="stat"><div class="k">Save per month</div><div class="v" id="taxMonth">–</div></div>
+          <div class="stat"><div class="k">Save per quarter</div><div class="v" id="taxQuarter">–</div></div>
+          <div class="stat"><div class="k">Yearly take-home</div><div class="v" id="takeYear">–</div></div>
+          <div class="stat"><div class="k">Monthly take-home</div><div class="v" id="takeMonth">–</div></div>
+        </div>
+        <div class="bar" aria-hidden="true">
+          <div id="b1" style="background:var(--good)"></div>
+          <div id="b2" style="background:var(--tax)"></div>
+          <div id="b3" style="background:var(--exp)"></div>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--good)"></i>Take-home</span>
+          <span><i style="background:var(--tax)"></i>Tax</span>
+          <span><i style="background:var(--exp)"></i>Expenses</span>
+        </div>
+        <button id="copy" type="button">Copy result</button>
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>How the tax set-aside is calculated</h2>
+      <ol>
+        <li><b>Profit</b> = yearly revenue − yearly expenses</li>
+        <li><b>Tax estimate</b> = profit × tax rate</li>
+        <li><b>Set-aside %</b> = tax estimate ÷ revenue</li>
+      </ol>
+      <p>Because expenses reduce your taxable profit, the set-aside percentage of revenue is lower than your tax rate. Move that percentage into a separate savings account every time a client pays you.</p>
+    </section>
+
+    <section class="info">
+      <h2>Frequently asked questions</h2>
+      <details><summary>How much should a freelancer set aside for taxes?</summary>
+        <p>Many freelancers save 20 to 30 percent of profit, but it depends on your country, income and deductions. Ask a local accountant for your exact rate.</p></details>
+      <details><summary>Do I pay tax on revenue or on profit?</summary>
+        <p>In most countries, on profit: revenue minus allowable business expenses. Rules differ, so check your local tax authority.</p></details>
+      <details><summary>Should I keep tax money in a separate account?</summary>
+        <p>Yes. Moving the set-aside percentage into savings whenever you get paid makes tax time much less stressful.</p></details>
+    </section>
+  </main>
+
+  <footer>© <span id="yr"></span> RateRight. Estimates only, not financial or tax advice. Nothing you type leaves your browser.</footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var last = "";
+  function num(id){ var v = parseFloat($(id).value); return isNaN(v) ? NaN : v; }
+  function money(n){ return $("cur").value + Math.round(n).toLocaleString("en-US"); }
+  function clear(){
+    ["pct","invSave","taxYear","taxMonth","taxQuarter","takeYear","takeMonth"].forEach(function(id){ $(id).textContent = "–"; });
+    ["b1","b2","b3"].forEach(function(id){ $(id).style.width = "0%"; });
+    last = "";
+  }
+  function calc(){
+    var rev=num("rev"), exp=num("exp"), tax=num("tax"), inv=num("inv");
+    var err=$("err"); err.textContent="";
+    if(isNaN(inv)) inv=0;
+    if([rev,exp,tax].some(isNaN)){ err.textContent="Please fill in revenue, expenses and tax rate."; clear(); return; }
+    if(rev<=0){ err.textContent="Revenue must be above 0."; clear(); return; }
+    if(exp<0||tax<0||inv<0){ err.textContent="Values cannot be negative."; clear(); return; }
+    if(tax>=100){ err.textContent="Tax rate must be below 100%."; clear(); return; }
+    if(exp>rev){ err.textContent="Expenses are higher than revenue, so there is no taxable profit."; clear(); return; }
+
+    var profit=rev-exp, taxAmt=profit*tax/100, pct=taxAmt/rev*100, take=profit-taxAmt;
+    $("pct").textContent=pct.toFixed(1)+"%";
+    $("invSave").textContent=money(inv*pct/100);
+    $("taxYear").textContent=money(taxAmt);
+    $("taxMonth").textContent=money(taxAmt/12);
+    $("taxQuarter").textContent=money(taxAmt/4);
+    $("takeYear").textContent=money(take);
+    $("takeMonth").textContent=money(take/12);
+    $("b1").style.width=(take/rev*100)+"%";
+    $("b2").style.width=(taxAmt/rev*100)+"%";
+    $("b3").style.width=(exp/rev*100)+"%";
+    last="With "+money(rev)+" yearly revenue, "+money(exp)+" expenses and a "+tax+"% tax rate, I should set aside "+pct.toFixed(1)+
+      "% of every payment ("+money(taxAmt/12)+" per month). Calculated with RateRight.";
+  }
+  ["rev","exp","tax","inv","cur"].forEach(function(id){
+    $(id).addEventListener("input",calc); $(id).addEventListener("change",calc);
+  });
+  $("copy").addEventListener("click",function(){
+    var btn=$("copy"); if(!last) return;
+    function done(){ btn.textContent="Copied!"; setTimeout(function(){ btn.textContent="Copy result"; },1500); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(last).then(done,function(){}); }
+    else{ var ta=document.createElement("textarea"); ta.value=last; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }catch(e){} document.body.removeChild(ta); }
+  });
+  $("yr").textContent=new Date().getFullYear();
+  calc();
+})();
+</script>
+</body>
+</html>

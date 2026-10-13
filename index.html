@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RateRight – Freelance Hourly Rate Calculator</title>
+<meta name="description" content="Free freelance hourly rate calculator. Enter your target income, taxes, expenses and billable hours to find the hourly and daily rate you should charge.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="RateRight – Freelance Hourly Rate Calculator">
+<meta property="og:description" content="Find out exactly what to charge per hour as a freelancer. Free, no signup.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<!-- After deploying, paste your Google Search Console verification tag here:
+<meta name="google-site-verification" content="YOUR_CODE"> -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "How do I calculate my freelance hourly rate?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Add your yearly business expenses to the pre-tax income you need, then divide by the hours you can realistically bill in a year. RateRight does this for you."}},
+    {"@type": "Question", "name": "Why is my freelance rate higher than an employee's hourly wage?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Freelancers pay their own taxes, expenses and time off, and cannot bill every working hour because of admin, marketing and gaps between projects."}},
+    {"@type": "Question", "name": "How many billable hours per week is realistic?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Most freelancers bill 20 to 30 hours a week. The rest of the week goes to finding clients, invoicing, communication and learning."}},
+    {"@type": "Question", "name": "Should I include time off in my rate?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. Holidays, sick days and slow periods are unpaid for freelancers, so the weeks you do not work must be covered by the weeks you do."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --text:#14213d; --muted:#5b6478; --line:#e3e6ef;
+  --brand:#4f46e5; --brand-d:#4338ca; --good:#16a34a; --tax:#f59e0b; --exp:#94a3b8;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0f1220; --card:#181c30; --text:#eef0fa; --muted:#a2a9c0; --line:#2a2f4a; --brand:#818cf8; --brand-d:#6366f1; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header{padding:28px 0 8px}
+.logo{font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+.logo span{color:var(--brand)}
+h1{font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.2;margin:14px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--muted);margin:0 0 20px;max-width:640px}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h2{margin:0 0 14px;font-size:1.05rem}
+label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 6px}
+label small{font-weight:400;color:var(--muted)}
+input,select{width:100%;padding:12px 14px;font-size:1rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}
+input:focus,select:focus{outline:2px solid var(--brand);outline-offset:1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.big{background:linear-gradient(135deg,var(--brand),var(--brand-d));color:#fff;border-radius:14px;padding:20px;text-align:center}
+.big .t{font-size:.9rem;opacity:.9}
+.big .n{font-size:clamp(2.2rem,9vw,3.2rem);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.big .u{font-size:.9rem;opacity:.9}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.stat{border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat .k{font-size:.78rem;color:var(--muted)}
+.stat .v{font-size:1.1rem;font-weight:700}
+.bar{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:16px 0 8px;background:var(--line)}
+.bar div{height:100%;transition:width .3s}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+button{margin-top:14px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--text);color:var(--bg);font-weight:700;font-size:.95rem;cursor:pointer}
+button:hover{opacity:.9}
+.err{color:#dc2626;font-size:.9rem;margin-top:10px;min-height:1.2em}
+.note{font-size:.85rem;color:var(--muted);margin-top:12px}
+section.info{margin:32px 0}
+section.info h2{font-size:1.4rem;margin:0 0 10px}
+section.info p,section.info li{color:var(--muted)}
+ol{padding-left:20px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{margin:10px 0 0}
+code{background:var(--bg);border:1px solid var(--line);padding:2px 6px;border-radius:6px;font-size:.9em}
+.logo a{color:inherit;text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px}
+.nav a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:600}
+.nav a:hover,.nav a.on{color:var(--brand)}
+.tools{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:700px){.tools{grid-template-columns:repeat(3,1fr)}}
+.tool{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--text)}
+.tool:hover{border-color:var(--brand)}
+.tool b{display:block;margin-bottom:4px}
+.tool span{color:var(--muted);font-size:.88rem}
+footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--muted);font-size:.85rem;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><a href="index.html">Rate<span>Right</span></a></div>
+    <nav class="nav">
+      <a href="index.html" class="on">Hourly Rate</a>
+      <a href="project-quote-calculator.html">Project Quote</a>
+      <a href="freelance-tax-calculator.html">Tax Set-Aside</a>
+      <a href="salary-to-freelance-rate-calculator.html">Salary to Freelance</a>
+    </nav>
+    <h1>Freelance Hourly Rate Calculator</h1>
+    <p class="lead">Find the hourly and daily rate you need to charge to hit your income goal after taxes, expenses, time off and non-billable hours. Free, private, no signup.</p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>Your numbers</h2>
+
+        <label for="cur">Currency</label>
+        <select id="cur">
+          <option value="$">USD ($)</option>
+          <option value="£">GBP (£)</option>
+          <option value="€">EUR (€)</option>
+          <option value="A$">AUD (A$)</option>
+          <option value="C$">CAD (C$)</option>
+          <option value="Rs ">PKR (Rs)</option>
+          <option value="₹">INR (₹)</option>
+          <option value="AED ">AED</option>
+        </select>
+
+        <label for="income">Desired yearly take-home income <small>(after tax and expenses)</small></label>
+        <input id="income" type="number" inputmode="decimal" min="0" value="60000">
+
+        <div class="row">
+          <div>
+            <label for="tax">Tax rate % <small>(estimate)</small></label>
+            <input id="tax" type="number" inputmode="decimal" min="0" max="90" value="20">
+          </div>
+          <div>
+            <label for="exp">Yearly expenses</label>
+            <input id="exp" type="number" inputmode="decimal" min="0" value="5000">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="hrs">Billable hours / week</label>
+            <input id="hrs" type="number" inputmode="decimal" min="1" max="80" value="25">
+          </div>
+          <div>
+            <label for="off">Weeks off / year</label>
+            <input id="off" type="number" inputmode="decimal" min="0" max="51" value="4">
+          </div>
+        </div>
+        <div class="err" id="err" role="alert"></div>
+        <div class="note">Expenses include software, internet, equipment, coworking, insurance and similar costs. Tip: most freelancers bill 20 to 30 hours a week, not 40.</div>
+      </div>
+
+      <div class="card" aria-live="polite">
+        <h2>Your rate</h2>
+        <div class="big">
+          <div class="t">You should charge at least</div>
+          <div class="n" id="hourly">–</div>
+          <div class="u">per hour</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="k">Daily rate</div><div class="v" id="daily">–</div></div>
+          <div class="stat"><div class="k">Monthly revenue needed</div><div class="v" id="monthly">–</div></div>
+          <div class="stat"><div class="k">Yearly revenue needed</div><div class="v" id="yearly">–</div></div>
+          <div class="stat"><div class="k">Billable hours / year</div><div class="v" id="yhrs">–</div></div>
+        </div>
+
+        <div class="bar" aria-hidden="true">
+          <div id="b1" style="background:var(--good)"></div>
+          <div id="b2" style="background:var(--tax)"></div>
+          <div id="b3" style="background:var(--exp)"></div>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--good)"></i>Take-home <b id="l1">–</b></span>
+          <span><i style="background:var(--tax)"></i>Tax <b id="l2">–</b></span>
+          <span><i style="background:var(--exp)"></i>Expenses <b id="l3">–</b></span>
+        </div>
+        <button id="copy" type="button">Copy result</button>
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>More free freelancer calculators</h2>
+      <div class="tools">
+        <a class="tool" href="project-quote-calculator.html"><b>Project Quote Calculator</b><span>Turn your rate and hours into a fixed price with buffer and deposit.</span></a>
+        <a class="tool" href="freelance-tax-calculator.html"><b>Tax Set-Aside Calculator</b><span>See what percentage of each invoice to save for taxes.</span></a>
+        <a class="tool" href="salary-to-freelance-rate-calculator.html"><b>Salary to Freelance Rate</b><span>Find the hourly rate that matches your full-time salary.</span></a>
+      </div>
+    </section>
+
+    <!-- Ad slot (AdSense) can go here later -->
+
+    <section class="info">
+      <h2>How the freelance rate is calculated</h2>
+      <p>RateRight works backwards from the money you want to keep.</p>
+      <ol>
+        <li><b>Revenue needed</b> = take-home ÷ (1 − tax rate) + expenses</li>
+        <li><b>Billable hours per year</b> = hours per week × (52 − weeks off)</li>
+        <li><b>Hourly rate</b> = revenue needed ÷ billable hours per year</li>
+        <li><b>Daily rate</b> = hourly rate × billable hours per week ÷ 5 working days</li>
+      </ol>
+      <p>This is a planning estimate, not tax advice. Tax rules differ by country, so check with a local accountant for exact figures.</p>
+    </section>
+
+    <section class="info">
+      <h2>Why freelancers must charge more than an employee's hourly wage</h2>
+      <p>An employee is paid for sick days, holidays, admin time and meetings. As a freelancer you only earn while you are billing. You also pay your own taxes, equipment, software and insurance, and you spend unpaid time finding clients and sending invoices. A fair freelance rate has to cover all of that.</p>
+    </section>
+
+    <section class="info">
+      <h2>Frequently asked questions</h2>
+      <details><summary>How do I calculate my freelance hourly rate?</summary>
+        <p>Add your yearly expenses to the pre-tax income you need, then divide by the hours you can realistically bill in a year. RateRight does this automatically.</p></details>
+      <details><summary>Why is my rate higher than an employee's hourly wage?</summary>
+        <p>Freelancers pay their own taxes, expenses and time off, and cannot bill every working hour because of admin, marketing and gaps between projects.</p></details>
+      <details><summary>How many billable hours per week is realistic?</summary>
+        <p>Most freelancers bill 20 to 30 hours a week. The rest goes to finding clients, invoicing, communication and learning.</p></details>
+      <details><summary>Should I include time off in my rate?</summary>
+        <p>Yes. Holidays, sick days and slow periods are unpaid, so the weeks you do work must cover the weeks you do not.</p></details>
+      <details><summary>Should I charge hourly or per project?</summary>
+        <p>Use your hourly rate as a floor. For projects, estimate the hours, multiply by your rate, and add a buffer for revisions and delays.</p></details>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="yr"></span> RateRight. Estimates only, not financial or tax advice. Nothing you type leaves your browser.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var last = "";
+
+  function num(id){ var v = parseFloat($(id).value); return isNaN(v) ? NaN : v; }
+  function money(n){
+    var c = $("cur").value;
+    return c + Math.round(n).toLocaleString("en-US");
+  }
+  function money2(n){
+    var c = $("cur").value;
+    return c + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  function clear(){
+    ["hourly","daily","monthly","yearly","yhrs","l1","l2","l3"].forEach(function(id){ $(id).textContent = "–"; });
+    ["b1","b2","b3"].forEach(function(id){ $(id).style.width = "0%"; });
+    last = "";
+  }
+
+  function calc(){
+    var income = num("income"), tax = num("tax"), exp = num("exp"), hrs = num("hrs"), off = num("off");
+    var err = $("err");
+    err.textContent = "";
+
+    if ([income,tax,exp,hrs,off].some(isNaN)) { err.textContent = "Please fill in all fields."; clear(); return; }
+    if (income < 0 || exp < 0 || tax < 0 || off < 0) { err.textContent = "Values cannot be negative."; clear(); return; }
+    if (tax >= 100) { err.textContent = "Tax rate must be below 100%."; clear(); return; }
+    if (hrs <= 0 || hrs > 80) { err.textContent = "Billable hours per week must be between 1 and 80."; clear(); return; }
+    if (off > 51) { err.textContent = "Weeks off must be 51 or fewer."; clear(); return; }
+
+    var t = tax / 100;
+    var pretax = income / (1 - t);
+    var revenue = pretax + exp;
+    var workWeeks = 52 - off;
+    var yearHours = hrs * workWeeks;
+    var hourly = revenue / yearHours;
+    var daily = hourly * hrs / 5;
+    var taxAmt = pretax - income;
+
+    $("hourly").textContent = money2(hourly);
+    $("daily").textContent = money(daily);
+    $("monthly").textContent = money(revenue / 12);
+    $("yearly").textContent = money(revenue);
+    $("yhrs").textContent = Math.round(yearHours).toLocaleString("en-US");
+
+    $("b1").style.width = (income / revenue * 100) + "%";
+    $("b2").style.width = (taxAmt / revenue * 100) + "%";
+    $("b3").style.width = (exp / revenue * 100) + "%";
+    $("l1").textContent = money(income);
+    $("l2").textContent = money(taxAmt);
+    $("l3").textContent = money(exp);
+
+    last = "To take home " + money(income) + " a year I need to charge " + money2(hourly) +
+           " per hour (" + money(daily) + " per day), based on " + hrs + " billable hours a week and " +
+           off + " weeks off. Calculated with RateRight.";
+  }
+
+  ["income","tax","exp","hrs","off","cur"].forEach(function(id){
+    $(id).addEventListener("input", calc);
+    $(id).addEventListener("change", calc);
+  });
+
+  $("copy").addEventListener("click", function(){
+    var btn = $("copy");
+    if (!last) return;
+    function done(){ btn.textContent = "Copied!"; setTimeout(function(){ btn.textContent = "Copy result"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(last).then(done, function(){});
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = last; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+  });
+
+  $("yr").textContent = new Date().getFullYear();
+  calc();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salary to Freelance Rate Calculator – RateRight</title>
+<meta name="description" content="Free salary to freelance rate calculator. Convert a full-time salary into the hourly rate you need as a freelancer, including benefits, taxes and unpaid time.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Salary to Freelance Rate Calculator – RateRight">
+<meta property="og:description" content="Thinking of going freelance? See what hourly rate matches your salary. Free, no signup.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "How do I convert my salary to a freelance rate?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Add the value of your benefits and extra self-employment costs to your salary, add business expenses, then divide by the hours you can realistically bill in a year."}},
+    {"@type": "Question", "name": "Why is the freelance rate so much higher than my salary hourly wage?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Employees are paid for 40 hours a week including holidays and admin. Freelancers bill fewer hours, pay for their own benefits and expenses, and have unpaid time off."}},
+    {"@type": "Question", "name": "What are employee benefits worth?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Health cover, pension contributions, paid leave and equipment are often worth 15 to 30 percent of a salary. Freelancers must pay for these themselves."}}
+  ]
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><a href="index.html">Rate<span>Right</span></a></div>
+    <nav class="nav">
+      <a href="index.html">Hourly Rate</a>
+      <a href="project-quote-calculator.html">Project Quote</a>
+      <a href="freelance-tax-calculator.html">Tax Set-Aside</a>
+      <a href="salary-to-freelance-rate-calculator.html" class="on">Salary to Freelance</a>
+    </nav>
+    <h1>Salary to Freelance Rate Calculator</h1>
+    <p class="lead">Thinking of going freelance? Find the hourly rate you need to match your current salary once benefits, extra costs and unpaid time are counted.</p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>Your situation</h2>
+        <label for="cur">Currency</label>
+        <select id="cur">
+          <option value="$">USD ($)</option>
+          <option value="£">GBP (£)</option>
+          <option value="€">EUR (€)</option>
+          <option value="A$">AUD (A$)</option>
+          <option value="C$">CAD (C$)</option>
+          <option value="Rs ">PKR (Rs)</option>
+          <option value="₹">INR (₹)</option>
+          <option value="AED ">AED</option>
+        </select>
+
+        <label for="sal">Current yearly salary <small>(before tax)</small></label>
+        <input id="sal" type="number" inputmode="decimal" min="0" value="50000">
+
+        <div class="row">
+          <div>
+            <label for="ben">Benefits value % <small>(leave, health, pension)</small></label>
+            <input id="ben" type="number" inputmode="decimal" min="0" value="20">
+          </div>
+          <div>
+            <label for="se">Extra self-employment cost %</label>
+            <input id="se" type="number" inputmode="decimal" min="0" value="8">
+          </div>
+        </div>
+
+        <label for="exp">Yearly business expenses</label>
+        <input id="exp" type="number" inputmode="decimal" min="0" value="4000">
+
+        <div class="row">
+          <div>
+            <label for="hrs">Billable hours / week</label>
+            <input id="hrs" type="number" inputmode="decimal" min="1" max="80" value="25">
+          </div>
+          <div>
+            <label for="off">Weeks off / year</label>
+            <input id="off" type="number" inputmode="decimal" min="0" max="51" value="4">
+          </div>
+        </div>
+
+        <label for="ehrs">Hours per week in your job</label>
+        <input id="ehrs" type="number" inputmode="decimal" min="1" max="80" value="40">
+        <div class="err" id="err" role="alert"></div>
+        <div class="note">Extra self-employment cost covers things like the employer share of social contributions you now pay yourself. Adjust it for your country.</div>
+      </div>
+
+      <div class="card" aria-live="polite">
+        <h2>Your freelance equivalent</h2>
+        <div class="big">
+          <div class="t">To match your salary, charge</div>
+          <div class="n" id="fHourly">–</div>
+          <div class="u">per hour</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">Your salary per hour now</div><div class="v" id="eHourly">–</div></div>
+          <div class="stat"><div class="k">Freelance rate is</div><div class="v" id="mult">–</div></div>
+          <div class="stat"><div class="k">Yearly revenue needed</div><div class="v" id="req">–</div></div>
+          <div class="stat"><div class="k">Monthly revenue needed</div><div class="v" id="reqM">–</div></div>
+          <div class="stat"><div class="k">Billable hours / year</div><div class="v" id="yh">–</div></div>
+          <div class="stat"><div class="k">Daily rate</div><div class="v" id="daily">–</div></div>
+        </div>
+        <button id="copy" type="button">Copy result</button>
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>How the conversion works</h2>
+      <ol>
+        <li><b>Revenue needed</b> = salary × (1 + benefits % + self-employment %) + business expenses</li>
+        <li><b>Billable hours</b> = billable hours per week × (52 − weeks off)</li>
+        <li><b>Freelance hourly rate</b> = revenue needed ÷ billable hours</li>
+        <li><b>Salary hourly rate</b> = salary ÷ (job hours per week × 52)</li>
+      </ol>
+      <p>This keeps your pre-tax position equal to your job. Treat the result as a minimum, and add a margin if you want freelancing to pay better than your salary.</p>
+    </section>
+
+    <section class="info">
+      <h2>Frequently asked questions</h2>
+      <details><summary>How do I convert my salary to a freelance rate?</summary>
+        <p>Add the value of your benefits and extra self-employment costs to your salary, add business expenses, then divide by the hours you can realistically bill in a year.</p></details>
+      <details><summary>Why is the freelance rate so much higher than my salary hourly wage?</summary>
+        <p>Employees are paid for 40 hours a week including holidays and admin. Freelancers bill fewer hours, pay for their own benefits and expenses, and have unpaid time off.</p></details>
+      <details><summary>What are employee benefits worth?</summary>
+        <p>Health cover, pension contributions, paid leave and equipment are often worth 15 to 30 percent of a salary.</p></details>
+      <details><summary>Already know your target income?</summary>
+        <p>Use the <a href="index.html">hourly rate calculator</a> to work backwards from the take-home amount you want.</p></details>
+    </section>
+  </main>
+
+  <footer>© <span id="yr"></span> RateRight. Estimates only, not financial or tax advice. Nothing you type leaves your browser.</footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var last = "";
+  function num(id){ var v = parseFloat($(id).value); return isNaN(v) ? NaN : v; }
+  function money(n){ return $("cur").value + Math.round(n).toLocaleString("en-US"); }
+  function money2(n){ return $("cur").value + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function clear(){
+    ["fHourly","eHourly","mult","req","reqM","yh","daily"].forEach(function(id){ $(id).textContent = "–"; });
+    last = "";
+  }
+  function calc(){
+    var sal=num("sal"), ben=num("ben"), se=num("se"), exp=num("exp"), hrs=num("hrs"), off=num("off"), ehrs=num("ehrs");
+    var err=$("err"); err.textContent="";
+    if([sal,ben,se,exp,hrs,off,ehrs].some(isNaN)){ err.textContent="Please fill in all fields."; clear(); return; }
+    if(sal<=0){ err.textContent="Salary must be above 0."; clear(); return; }
+    if(ben<0||se<0||exp<0||off<0){ err.textContent="Values cannot be negative."; clear(); return; }
+    if(hrs<=0||hrs>80||ehrs<=0||ehrs>80){ err.textContent="Hours per week must be between 1 and 80."; clear(); return; }
+    if(off>51){ err.textContent="Weeks off must be 51 or fewer."; clear(); return; }
+
+    var req=sal*(1+(ben+se)/100)+exp;
+    var yh=hrs*(52-off);
+    var fH=req/yh;
+    var eH=sal/(ehrs*52);
+
+    $("fHourly").textContent=money2(fH);
+    $("eHourly").textContent=money2(eH);
+    $("mult").textContent=(fH/eH).toFixed(1)+"× higher";
+    $("req").textContent=money(req);
+    $("reqM").textContent=money(req/12);
+    $("yh").textContent=Math.round(yh).toLocaleString("en-US");
+    $("daily").textContent=money(fH*hrs/5);
+
+    last="A "+money(sal)+" salary equals about "+money2(fH)+" per hour as a freelancer ("+(fH/eH).toFixed(1)+
+      "x my "+money2(eH)+" salary hourly rate), based on "+hrs+" billable hours a week and "+off+" weeks off. Calculated with RateRight.";
+  }
+  ["sal","ben","se","exp","hrs","off","ehrs","cur"].forEach(function(id){
+    $(id).addEventListener("input",calc); $(id).addEventListener("change",calc);
+  });
+  $("copy").addEventListener("click",function(){
+    var btn=$("copy"); if(!last) return;
+    function done(){ btn.textContent="Copied!"; setTimeout(function(){ btn.textContent="Copy result"; },1500); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(last).then(done,function(){}); }
+    else{ var ta=document.createElement("textarea"); ta.value=last; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }catch(e){} document.body.removeChild(ta); }
+  });
+  $("yr").textContent=new Date().getFullYear();
+  calc();
+})();
+</script>
+</body>
+</html>

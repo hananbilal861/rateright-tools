@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freelance Project Quote Calculator – RateRight</title>
+<meta name="description" content="Free project quote calculator for freelancers. Turn your hourly rate, estimated hours, revision buffer and costs into a fair fixed price and deposit amount.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Freelance Project Quote Calculator – RateRight">
+<meta property="og:description" content="Price any freelance project with a revision buffer, rush fee and deposit. Free, no signup.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "How do I price a freelance project?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Estimate the hours, multiply by your hourly rate, add a buffer for revisions and delays, then add any direct project costs such as stock assets or software."}},
+    {"@type": "Question", "name": "How much buffer should I add to a quote?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Most freelancers add 15 to 30 percent to cover revisions, extra communication and scope creep. Use a higher buffer for new clients or unclear briefs."}},
+    {"@type": "Question", "name": "How big should the deposit be?",
+     "acceptedAnswer": {"@type": "Answer", "text": "A deposit of 30 to 50 percent before starting is common. It protects you from non-payment and shows the client is serious."}}
+  ]
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><a href="index.html">Rate<span>Right</span></a></div>
+    <nav class="nav">
+      <a href="index.html">Hourly Rate</a>
+      <a href="project-quote-calculator.html" class="on">Project Quote</a>
+      <a href="freelance-tax-calculator.html">Tax Set-Aside</a>
+      <a href="salary-to-freelance-rate-calculator.html">Salary to Freelance</a>
+    </nav>
+    <h1>Freelance Project Quote Calculator</h1>
+    <p class="lead">Turn your hourly rate and time estimate into a fixed project price, with a revision buffer, optional rush fee and deposit. Free and private.</p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <h2>Project details</h2>
+        <label for="cur">Currency</label>
+        <select id="cur">
+          <option value="$">USD ($)</option>
+          <option value="£">GBP (£)</option>
+          <option value="€">EUR (€)</option>
+          <option value="A$">AUD (A$)</option>
+          <option value="C$">CAD (C$)</option>
+          <option value="Rs ">PKR (Rs)</option>
+          <option value="₹">INR (₹)</option>
+          <option value="AED ">AED</option>
+        </select>
+
+        <div class="row">
+          <div>
+            <label for="rate">Your hourly rate</label>
+            <input id="rate" type="number" inputmode="decimal" min="0" value="50">
+          </div>
+          <div>
+            <label for="hrs">Estimated hours</label>
+            <input id="hrs" type="number" inputmode="decimal" min="0" value="20">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="buf">Buffer % <small>(revisions)</small></label>
+            <input id="buf" type="number" inputmode="decimal" min="0" value="20">
+          </div>
+          <div>
+            <label for="rush">Rush fee % <small>(optional)</small></label>
+            <input id="rush" type="number" inputmode="decimal" min="0" value="0">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="cost">Project costs <small>(assets, tools)</small></label>
+            <input id="cost" type="number" inputmode="decimal" min="0" value="0">
+          </div>
+          <div>
+            <label for="dep">Deposit %</label>
+            <input id="dep" type="number" inputmode="decimal" min="0" max="100" value="50">
+          </div>
+        </div>
+        <div class="err" id="err" role="alert"></div>
+        <div class="note">Not sure of your hourly rate? Use the <a href="index.html">hourly rate calculator</a> first.</div>
+      </div>
+
+      <div class="card" aria-live="polite">
+        <h2>Your quote</h2>
+        <div class="big">
+          <div class="t">Quote this project at</div>
+          <div class="n" id="total">–</div>
+          <div class="u">fixed price</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">Work (hours × rate)</div><div class="v" id="labor">–</div></div>
+          <div class="stat"><div class="k">Revision buffer</div><div class="v" id="buffer">–</div></div>
+          <div class="stat"><div class="k">Rush fee</div><div class="v" id="rushAmt">–</div></div>
+          <div class="stat"><div class="k">Project costs</div><div class="v" id="costs">–</div></div>
+          <div class="stat"><div class="k">Deposit upfront</div><div class="v" id="deposit">–</div></div>
+          <div class="stat"><div class="k">Balance on delivery</div><div class="v" id="balance">–</div></div>
+        </div>
+        <div class="note">Effective hourly rate if the job takes exactly your estimate: <b id="eff">–</b></div>
+        <button id="copy" type="button">Copy quote summary</button>
+      </div>
+    </div>
+
+    <section class="info">
+      <h2>How the quote is calculated</h2>
+      <ol>
+        <li><b>Work</b> = hourly rate × estimated hours</li>
+        <li><b>Buffer</b> = work × buffer % (covers revisions and small scope changes)</li>
+        <li><b>Rush fee</b> = (work + buffer) × rush %</li>
+        <li><b>Quote</b> = work + buffer + rush fee + project costs</li>
+      </ol>
+      <p>Fixed-price quotes protect you from slow clients and endless revisions, as long as the scope is written down clearly. State how many revision rounds are included, and charge your hourly rate for anything beyond that.</p>
+    </section>
+
+    <section class="info">
+      <h2>Frequently asked questions</h2>
+      <details><summary>How do I price a freelance project?</summary>
+        <p>Estimate the hours, multiply by your hourly rate, add a buffer for revisions and delays, then add any direct project costs such as stock assets or software.</p></details>
+      <details><summary>How much buffer should I add to a quote?</summary>
+        <p>Most freelancers add 15 to 30 percent. Use a higher buffer for new clients or unclear briefs.</p></details>
+      <details><summary>How big should the deposit be?</summary>
+        <p>30 to 50 percent before starting is common. It protects you from non-payment and shows the client is serious.</p></details>
+      <details><summary>Should I charge hourly or a fixed price?</summary>
+        <p>Fixed prices suit clearly defined projects. Hourly billing suits open-ended work where the scope keeps changing.</p></details>
+    </section>
+  </main>
+
+  <footer>© <span id="yr"></span> RateRight. Estimates only. Nothing you type leaves your browser.</footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var last = "";
+  function num(id){ var v = parseFloat($(id).value); return isNaN(v) ? NaN : v; }
+  function money(n){ return $("cur").value + Math.round(n).toLocaleString("en-US"); }
+  function money2(n){ return $("cur").value + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function clear(){
+    ["total","labor","buffer","rushAmt","costs","deposit","balance","eff"].forEach(function(id){ $(id).textContent = "–"; });
+    last = "";
+  }
+  function calc(){
+    var rate=num("rate"), hrs=num("hrs"), buf=num("buf"), rush=num("rush"), cost=num("cost"), dep=num("dep");
+    var err=$("err"); err.textContent="";
+    if([rate,hrs,buf,rush,cost,dep].some(isNaN)){ err.textContent="Please fill in all fields."; clear(); return; }
+    if(rate<0||hrs<=0||buf<0||rush<0||cost<0||dep<0){ err.textContent="Hours must be above 0 and values cannot be negative."; clear(); return; }
+    if(dep>100){ err.textContent="Deposit cannot be more than 100%."; clear(); return; }
+
+    var labor=rate*hrs, buffer=labor*buf/100, sub=labor+buffer, rushAmt=sub*rush/100;
+    var total=sub+rushAmt+cost, deposit=total*dep/100, balance=total-deposit;
+    var eff=(total-cost)/hrs;
+
+    $("total").textContent=money(total);
+    $("labor").textContent=money(labor);
+    $("buffer").textContent=money(buffer);
+    $("rushAmt").textContent=money(rushAmt);
+    $("costs").textContent=money(cost);
+    $("deposit").textContent=money(deposit);
+    $("balance").textContent=money(balance);
+    $("eff").textContent=money2(eff)+" / hour";
+
+    last="Project quote: "+money(total)+" fixed price ("+hrs+" estimated hours at "+money2(rate)+"/hour, "+buf+"% revision buffer"+
+      (rush>0?", "+rush+"% rush fee":"")+(cost>0?", "+money(cost)+" project costs":"")+"). Deposit "+money(deposit)+" upfront, "+money(balance)+" on delivery.";
+  }
+  ["rate","hrs","buf","rush","cost","dep","cur"].forEach(function(id){
+    $(id).addEventListener("input",calc); $(id).addEventListener("change",calc);
+  });
+  $("copy").addEventListener("click",function(){
+    var btn=$("copy"); if(!last) return;
+    function done(){ btn.textContent="Copied!"; setTimeout(function(){ btn.textContent="Copy quote summary"; },1500); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(last).then(done,function(){}); }
+    else{ var ta=document.createElement("textarea"); ta.value=last; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }catch(e){} document.body.removeChild(ta); }
+  });
+  $("yr").textContent=new Date().getFullYear();
+  calc();
+})();
+</script>
+</body>
+</html>
